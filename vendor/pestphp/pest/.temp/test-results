@@ -1,0 +1,1 @@
+{"version":"pest_4.7.8","defects":[],"times":{"P\\Tests\\Feature\\HomePageTest::__pest_evaluable_home_page_renders_storefront_sections":0.047,"P\\Tests\\Feature\\HomePageTest::__pest_evaluable_home_page_lists_ten_latest_products":0.004,"P\\Tests\\Feature\\ExampleTest::__pest_evaluable_it_returns_a_successful_response":0.004}}
