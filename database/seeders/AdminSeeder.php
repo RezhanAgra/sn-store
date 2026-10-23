@@ -8,17 +8,19 @@ use Illuminate\Database\Seeder;
 class AdminSeeder extends Seeder
 {
     /**
-     * Buat akun admin awal. Ganti password setelah login pertama.
+     * Buat akun admin awal dan beri role admin (jalankan RolePermissionSeeder lebih dulu). Ganti password setelah login pertama.
      */
     public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'admin@snstore.test'],
+        $admin = User::updateOrCreate(
+            ['email' => 'admin123@gmail.com'],
             [
                 'name' => 'Admin SN Store',
-                'password' => 'Admin@12345',
+                'password' => 'password1234',
                 'email_verified_at' => now(),
             ],
         );
+
+        $admin->assignRole('admin');
     }
 }

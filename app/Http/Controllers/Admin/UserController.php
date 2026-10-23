@@ -24,10 +24,10 @@ class UserController extends Controller
     {
         return [
             ['name' => 'Admin SN Store', 'email' => 'admin@example.com', 'role' => 'Administrator', 'status' => 'active'],
-            ['name' => 'Budi Santoso', 'email' => 'budi@example.com', 'role' => 'Staf', 'status' => 'active'],
-            ['name' => 'Siti Rahma', 'email' => 'siti@example.com', 'role' => 'Staf', 'status' => 'active'],
-            ['name' => 'Andi Pratama', 'email' => 'andi@example.com', 'role' => 'Pelanggan', 'status' => 'active'],
-            ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'role' => 'Pelanggan', 'status' => 'active'],
+            ['name' => 'Budi Santoso', 'email' => 'budi@example.com', 'role' => 'Customer', 'status' => 'active'],
+            ['name' => 'Siti Rahma', 'email' => 'siti@example.com', 'role' => 'Customer', 'status' => 'active'],
+            ['name' => 'Andi Pratama', 'email' => 'andi@example.com', 'role' => 'Customer', 'status' => 'active'],
+            ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'role' => 'Customer', 'status' => 'active'],
         ];
     }
 }

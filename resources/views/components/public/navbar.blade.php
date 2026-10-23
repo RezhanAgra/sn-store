@@ -46,9 +46,16 @@
             </a>
 
             @auth
-                <a href="{{ route('admin.dashboard') }}" class="hidden rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition hover:bg-red-700 sm:inline-flex">Dashboard</a>
+                @role('admin')
+                    <a href="{{ route('admin.dashboard') }}" class="hidden rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition hover:bg-red-700 sm:inline-flex">Dashboard</a>
+                @endrole
+                <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">
+                    @csrf
+                    <button type="submit" class="rounded-full border border-red-600 px-5 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50">Logout</button>
+                </form>
             @else
-                <a href="{{ route('login') }}" class="hidden rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition hover:bg-red-700 sm:inline-flex">Login</a>
+                <a href="{{ route('login') }}" class="hidden rounded-full border border-red-600 px-5 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 sm:inline-flex">Login</a>
+                <a href="{{ route('register') }}" class="hidden rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition hover:bg-red-700 sm:inline-flex">Register</a>
             @endauth
 
             <button type="button" @click="mobileOpen = !mobileOpen" class="rounded-lg p-2 text-gray-700 hover:bg-gray-100 lg:hidden" aria-label="Buka menu" :aria-expanded="mobileOpen">
@@ -71,10 +78,19 @@
         @foreach ($categories as $category)
             <a href="#produk" class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600">{{ $category['name'] }}</a>
         @endforeach
-        @auth
-            <a href="{{ route('admin.dashboard') }}" class="mt-3 block rounded-full bg-red-600 px-5 py-2.5 text-center text-sm font-semibold text-white sm:hidden">Dashboard</a>
-        @else
-            <a href="{{ route('login') }}" class="mt-3 block rounded-full bg-red-600 px-5 py-2.5 text-center text-sm font-semibold text-white sm:hidden">Login</a>
-        @endauth
+        <div class="mt-3 space-y-2 sm:hidden">
+            @auth
+                @role('admin')
+                    <a href="{{ route('admin.dashboard') }}" class="block rounded-full bg-red-600 px-5 py-2.5 text-center text-sm font-semibold text-white">Dashboard</a>
+                @endrole
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full block rounded-full border border-red-600 px-5 py-2.5 text-center text-sm font-semibold text-red-600">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="block rounded-full border border-red-600 px-5 py-2.5 text-center text-sm font-semibold text-red-600">Login</a>
+                <a href="{{ route('register') }}" class="block rounded-full bg-red-600 px-5 py-2.5 text-center text-sm font-semibold text-white">Register</a>
+            @endauth
+        </div>
     </div>
 </header>

@@ -15,8 +15,10 @@
             <ul class="mt-4 space-y-2 text-sm">
                 <li><a href="{{ route('home') }}" class="hover:text-red-500">Beranda</a></li>
                 <li><a href="#produk" class="hover:text-red-500">Produk</a></li>
-                <li><a href="{{ route('login') }}" class="hover:text-red-500">Login</a></li>
-                <li><a href="{{ route('register') }}" class="hover:text-red-500">Daftar</a></li>
+                @guest
+                    <li><a href="{{ route('login') }}" class="hover:text-red-500">Login</a></li>
+                    <li><a href="{{ route('register') }}" class="hover:text-red-500">Daftar</a></li>
+                @endguest
             </ul>
         </div>
 
