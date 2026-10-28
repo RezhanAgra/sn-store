@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
@@ -57,12 +58,13 @@ test('authenticated user can view product and transaction lists', function () {
 });
 
 test('authenticated user can view category list and create page', function () {
+    Category::factory()->create(['name' => 'Audio & Headphone']);
     $this->actingAs(createAdminUser());
 
     $this->get(route('admin.categories.index'))
         ->assertOk()
         ->assertSee('Daftar Kategori')
-        ->assertSee('Audio & Headphone')
+        ->assertSee('Audio &amp; Headphone', false)
         ->assertSee('Tambah Kategori');
 
     $this->get(route('admin.categories.create'))->assertOk()->assertSee('Nama Kategori');

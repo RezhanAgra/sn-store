@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
+use App\Models\Category;
+use App\Services\CategoryService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
+    public function __construct(private CategoryService $categoryService) {}
+
     /**
      * Tampilkan daftar kategori.
      */
     public function index(): View
     {
-        return view('pages.admin.categories.index', ['categories' => $this->categories()]);
+        return view('pages.admin.categories.index', ['categories' => $this->categoryService->all()]);
     }
 
     /**
@@ -24,24 +30,40 @@ class CategoryController extends Controller
     }
 
     /**
-     * Data dummy kategori. Ganti dengan Category::latest()->get() saat model tersedia.
-     *
-     * @return array<int, array{name: string, slug: string, description: string, status: string, created_at: string}>
+     * Simpan kategori baru.
      */
-    private function categories(): array
+    public function store(CategoryRequest $request): RedirectResponse
     {
-        $items = [
-            ['name' => 'Aksesoris', 'slug' => 'aksesoris', 'description' => 'Power bank, kabel, keyboard, dan aksesoris lainnya.'],
-            ['name' => 'Smartwatch', 'slug' => 'smartwatch', 'description' => 'Jam tangan pintar dan fitness tracker.'],
-            ['name' => 'Kamera', 'slug' => 'kamera', 'description' => 'Kamera mirrorless, DSLR, dan aksesorisnya.'],
-            ['name' => 'Audio & Headphone', 'slug' => 'audio', 'description' => 'Headphone, earphone, dan speaker berkualitas.'],
-            ['name' => 'Laptop', 'slug' => 'laptop', 'description' => 'Laptop untuk kerja, kuliah, dan gaming.'],
-            ['name' => 'Smartphone', 'slug' => 'smartphone', 'description' => 'Smartphone Android dan iOS dari berbagai merek.'],
-        ];
+        $this->categoryService->create($request->validated());
 
-        return array_map(fn (array $item): array => $item + [
-            'status' => 'active',
-            'created_at' => '21 Oct 2026',
-        ], $items);
+        return to_route('admin.categories.index')->with('status', 'Kategori berhasil ditambahkan.');
+    }
+
+    /**
+     * Tampilkan form ubah kategori.
+     */
+    public function edit(Category $category): View
+    {
+        return view('pages.admin.categories.edit', ['category' => $category]);
+    }
+
+    /**
+     * Perbarui kategori.
+     */
+    public function update(CategoryRequest $request, Category $category): RedirectResponse
+    {
+        $this->categoryService->update($category, $request->validated());
+
+        return to_route('admin.categories.index')->with('status', 'Kategori berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus kategori.
+     */
+    public function destroy(Category $category): RedirectResponse
+    {
+        $this->categoryService->delete($category);
+
+        return to_route('admin.categories.index')->with('status', 'Kategori berhasil dihapus.');
     }
 }
