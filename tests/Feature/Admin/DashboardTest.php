@@ -46,8 +46,7 @@ test('authenticated user can view product and transaction lists', function () {
 
     $this->get(route('admin.products.index'))
         ->assertOk()
-        ->assertSee('Tambah Produk')
-        ->assertSee('Smartphone Nova X12 256GB');
+        ->assertSee('Tambah Produk');
 
     $this->get(route('admin.transactions.index'))
         ->assertOk()

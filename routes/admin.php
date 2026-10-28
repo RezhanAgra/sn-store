@@ -14,8 +14,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('categories', CategoryController::class)->except('show');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::resource('products', ProductController::class)->except('show');
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
         Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
     });

@@ -3,16 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\UpdateProductRequest;
+use App\Models\Product;
+use App\Services\CategoryService;
+use App\Services\ProductService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        private ProductService $productService,
+        private CategoryService $categoryService,
+    ) {}
+
     /**
      * Tampilkan daftar produk.
      */
     public function index(): View
     {
-        return view('pages.admin.products.index', ['products' => $this->products()]);
+        return view('pages.admin.products.index', ['products' => $this->productService->all()]);
     }
 
     /**
@@ -20,35 +31,47 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('pages.admin.products.create');
+        return view('pages.admin.products.create', ['categories' => $this->categoryService->all()]);
     }
 
     /**
-     * Data dummy produk. Ganti dengan Product::latest()->get() saat model tersedia.
-     *
-     * @return array<int, array{name: string, category: string, price: int, stock: int, image: string}>
+     * Simpan produk baru.
      */
-    private function products(): array
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        $items = [
-            ['Smartphone Nova X12 256GB', 'Smartphone', 6499000, 24],
-            ['Laptop Zenith Pro 14" i7', 'Laptop', 15999000, 8],
-            ['Headphone Wireless Aura ANC', 'Audio', 1299000, 56],
-            ['Kamera Mirrorless Lumo M5', 'Kamera', 11499000, 0],
-            ['Smartwatch Pulse S3', 'Smartwatch', 1899000, 31],
-            ['Speaker Bluetooth Boom 360', 'Audio', 749000, 42],
-            ['Tablet Slate 11" 128GB', 'Tablet', 4299000, 0],
-            ['Power Bank Volt 20.000 mAh', 'Aksesoris', 359000, 120],
-            ['Keyboard Mekanikal Strike TKL', 'Aksesoris', 899000, 17],
-            ['Monitor Vista 27" QHD 144Hz', 'Monitor', 3799000, 9],
-        ];
+        $this->productService->create($request->validated());
 
-        return array_map(fn (array $item, int $index): array => [
-            'name' => $item[0],
-            'category' => $item[1],
-            'price' => $item[2],
-            'stock' => $item[3],
-            'image' => 'https://picsum.photos/seed/snstore-product'.($index + 1).'/120/120',
-        ], $items, array_keys($items));
+        return to_route('admin.products.index')->with('status', 'Produk berhasil ditambahkan.');
+    }
+
+    /**
+     * Tampilkan form ubah produk.
+     */
+    public function edit(Product $product): View
+    {
+        return view('pages.admin.products.edit', [
+            'product' => $product,
+            'categories' => $this->categoryService->all(),
+        ]);
+    }
+
+    /**
+     * Perbarui produk.
+     */
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
+    {
+        $this->productService->update($product, $request->validated());
+
+        return to_route('admin.products.index')->with('status', 'Produk berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus produk.
+     */
+    public function destroy(Product $product): RedirectResponse
+    {
+        $this->productService->delete($product);
+
+        return to_route('admin.products.index')->with('status', 'Produk berhasil dihapus.');
     }
 }
