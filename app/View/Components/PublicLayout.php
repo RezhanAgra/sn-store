@@ -2,17 +2,26 @@
 
 namespace App\View\Components;
 
+use App\Models\Category;
+use App\Services\CartService;
+use App\Services\CategoryService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
 class PublicLayout extends Component
 {
     /**
-     * @param  array<int, array{name: string, slug: string}>  $categories
+     * @var Collection<int, Category>
      */
-    public function __construct(public array $categories = [])
+    public Collection $categories;
+
+    public int $cartCount;
+
+    public function __construct(CategoryService $categoryService, CartService $cartService)
     {
-        $this->categories = $categories ?: config('storefront.categories');
+        $this->categories = $categoryService->all();
+        $this->cartCount = $cartService->count(auth()->user());
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class ProductService
@@ -20,7 +21,36 @@ class ProductService
      */
     public function all(): Collection
     {
-        return Product::with('category')->latest()->get();
+        return Product::with('category')->latest()->latest('id')->get();
+    }
+
+    /**
+     * Ambil produk terbaru beserta kategorinya.
+     *
+     * @return Collection<int, Product>
+     */
+    public function latest(int $limit): Collection
+    {
+        return Product::with('category')->latest()->latest('id')->limit($limit)->get();
+    }
+
+    /**
+     * Ambil produk dengan pencarian (nama atau kategori) dan filter slug kategori.
+     *
+     * @return LengthAwarePaginator<int, Product>
+     */
+    public function paginate(?string $search, ?string $categorySlug, int $perPage = 12): LengthAwarePaginator
+    {
+        return Product::with('category')
+            ->when($categorySlug, fn ($query) => $query->whereHas('category', fn ($category) => $category->where('slug', $categorySlug)))
+            ->when($search, fn ($query) => $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('category', fn ($category) => $category->where('name', 'like', "%{$search}%"));
+            }))
+            ->latest()
+            ->latest('id')
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     /**

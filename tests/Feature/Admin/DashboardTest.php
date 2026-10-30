@@ -73,13 +73,20 @@ test('guest cannot access admin category pages', function () {
     $this->get(route('admin.categories.index'))->assertRedirect(route('login'));
 });
 
-test('authenticated user can view demo user list', function () {
-    $this->actingAs(createAdminUser())
+test('admin user list shows users from the database', function () {
+    $admin = createAdminUser();
+    User::factory()->unverified()->create(['name' => 'Budi Santoso', 'email' => 'budi@example.com']);
+
+    $this->actingAs($admin)
         ->get(route('admin.users.index'))
         ->assertOk()
-        ->assertSee('Pengguna demo')
-        ->assertSee('5 akun contoh')
-        ->assertSee('Email contoh');
+        ->assertSee('Daftar Pengguna')
+        ->assertSee('2 pengguna terdaftar')
+        ->assertSee($admin->email)
+        ->assertSee('Admin')
+        ->assertSee('Budi Santoso')
+        ->assertSee('Belum Verifikasi')
+        ->assertDontSee('akun contoh');
 });
 
 test('guest cannot access admin user page', function () {

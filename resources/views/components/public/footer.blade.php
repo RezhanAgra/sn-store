@@ -14,7 +14,7 @@
             <h3 class="text-sm font-bold uppercase tracking-wider text-white">Navigasi</h3>
             <ul class="mt-4 space-y-2 text-sm">
                 <li><a href="{{ route('home') }}" class="hover:text-red-500">Beranda</a></li>
-                <li><a href="#produk" class="hover:text-red-500">Produk</a></li>
+                <li><a href="{{ route('products.index') }}" class="hover:text-red-500">Produk</a></li>
                 @guest
                     <li><a href="{{ route('login') }}" class="hover:text-red-500">Login</a></li>
                     <li><a href="{{ route('register') }}" class="hover:text-red-500">Daftar</a></li>
@@ -26,7 +26,7 @@
             <h3 class="text-sm font-bold uppercase tracking-wider text-white">Kategori</h3>
             <ul class="mt-4 space-y-2 text-sm">
                 @foreach ($categories as $category)
-                    <li><a href="#produk" class="hover:text-red-500">{{ $category['name'] }}</a></li>
+                    <li><a href="{{ route('products.index', ['category' => $category->slug]) }}" class="hover:text-red-500">{{ $category->name }}</a></li>
                 @endforeach
             </ul>
         </div>

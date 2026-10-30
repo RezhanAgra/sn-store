@@ -15,7 +15,7 @@ class CategoryService
      */
     public function all(): Collection
     {
-        return Category::latest()->get();
+        return Category::latest()->latest('id')->get();
     }
 
     /**

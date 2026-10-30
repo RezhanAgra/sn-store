@@ -1,19 +1,9 @@
 <?php
 
 /**
- * Data sementara (dummy) storefront. Ganti dengan data database
- * saat model Category dan Product sudah tersedia.
+ * Data statis storefront (slide beranda). Kategori dan produk diambil dari database.
  */
 return [
-    'categories' => [
-        ['name' => 'Smartphone', 'slug' => 'smartphone'],
-        ['name' => 'Laptop', 'slug' => 'laptop'],
-        ['name' => 'Audio & Headphone', 'slug' => 'audio'],
-        ['name' => 'Kamera', 'slug' => 'kamera'],
-        ['name' => 'Smartwatch', 'slug' => 'smartwatch'],
-        ['name' => 'Aksesoris', 'slug' => 'aksesoris'],
-    ],
-
     'slides' => [
         [
             'image' => 'https://picsum.photos/seed/snstore-hero1/1600/700',

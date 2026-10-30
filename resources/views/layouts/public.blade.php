@@ -15,9 +15,20 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="flex min-h-screen flex-col bg-gray-50 font-sans text-gray-900 antialiased">
-        <x-public.navbar :categories="$categories" />
+        <x-public.navbar :categories="$categories" :cart-count="$cartCount" />
 
         <main class="flex-1">
+            @if (session('status') || $errors->has('cart'))
+                <div class="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+                    @if (session('status'))
+                        <div role="status" class="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{ session('status') }}</div>
+                    @endif
+                    @if ($errors->has('cart'))
+                        <div role="alert" class="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{{ $errors->first('cart') }}</div>
+                    @endif
+                </div>
+            @endif
+
             {{ $slot }}
         </main>
 

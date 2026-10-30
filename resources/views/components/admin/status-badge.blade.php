@@ -7,6 +7,8 @@
         'shipped' => ['Dikirim', 'bg-sky-50 text-sky-700'],
         'cancelled' => ['Dibatalkan', 'bg-red-50 text-red-700'],
         'active' => ['Aktif', 'bg-emerald-50 text-emerald-700'],
+        'verified' => ['Terverifikasi', 'bg-emerald-50 text-emerald-700'],
+        'unverified' => ['Belum Verifikasi', 'bg-amber-50 text-amber-700'],
         'empty' => ['Stok Habis', 'bg-red-50 text-red-700'],
     ];
     [$label, $class] = $styles[$status];

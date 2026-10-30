@@ -27,13 +27,15 @@
                 <span class="text-sm font-bold uppercase tracking-wider text-red-600">Terbaru</span>
                 <h2 class="mt-1 text-2xl font-extrabold text-gray-900 sm:text-3xl">Produk Terbaru</h2>
             </div>
-            <a href="#" class="text-sm font-semibold text-red-600 hover:text-red-700">Lihat semua &rarr;</a>
+            <a href="{{ route('products.index') }}" class="text-sm font-semibold text-red-600 hover:text-red-700">Lihat semua &rarr;</a>
         </div>
 
         <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-5">
-            @foreach ($products as $product)
+            @forelse ($products as $product)
                 <x-public.product-card :product="$product" />
-            @endforeach
+            @empty
+                <p class="col-span-full py-12 text-center text-sm text-gray-500">Belum ada produk.</p>
+            @endforelse
         </div>
     </section>
 
