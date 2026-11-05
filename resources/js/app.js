@@ -27,4 +27,115 @@ window.confirmDelete = (form, label) => {
     });
 };
 
+window.regionSelect = (initial) => ({
+    province: initial.province,
+    city: initial.city,
+    district: initial.district,
+    village: initial.village,
+    cities: [],
+    districts: [],
+    villages: [],
+    postalCode: initial.postalCode,
+    subtotal: initial.subtotal,
+    shippingOptions: [],
+    shippingOption: '',
+    loadingShipping: false,
+    shippingError: '',
+
+    get selectedShipping() {
+        return this.shippingOptions.find((option) => option.key === this.shippingOption) ?? null;
+    },
+
+    get grandTotal() {
+        return this.subtotal + (this.selectedShipping?.cost ?? 0);
+    },
+
+    formatRupiah(amount) {
+        return 'Rp' + new Intl.NumberFormat('id-ID').format(amount);
+    },
+
+    async loadShipping() {
+        this.shippingOptions = [];
+        this.shippingOption = '';
+        this.shippingError = '';
+
+        if (!this.village || this.postalCode.length !== 5) {
+            return;
+        }
+
+        const requestKey = `${this.village}:${this.postalCode}`;
+        this.loadingShipping = true;
+
+        try {
+            const response = await fetch(initial.urls.shipping, {
+                method: 'POST',
+                headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': initial.csrf },
+                body: JSON.stringify({ village_code: this.village, postal_code: this.postalCode }),
+            });
+            const body = await response.json();
+
+            if (requestKey !== `${this.village}:${this.postalCode}`) {
+                return;
+            }
+
+            if (response.ok) {
+                this.shippingOptions = body;
+                this.shippingOption = body[0]?.key ?? '';
+            } else {
+                this.shippingError = Object.values(body.errors ?? {})[0]?.[0] ?? 'Ongkos kirim tidak dapat dihitung.';
+            }
+        } catch {
+            this.shippingError = 'Ongkos kirim tidak dapat dihitung.';
+        } finally {
+            this.loadingShipping = false;
+        }
+    },
+
+    async init() {
+        if (this.province) {
+            this.cities = await this.fetchOptions('cities', this.province);
+        }
+        if (this.city) {
+            this.districts = await this.fetchOptions('districts', this.city);
+        }
+        if (this.district) {
+            this.villages = await this.fetchOptions('villages', this.district);
+        }
+        await this.loadShipping();
+    },
+
+    async fetchOptions(type, code) {
+        const response = await fetch(initial.urls[type].replace('__code__', code), { headers: { Accept: 'application/json' } });
+
+        return response.ok ? response.json() : [];
+    },
+
+    async loadCities() {
+        this.city = this.district = this.village = '';
+        this.loadShipping();
+        this.cities = this.districts = this.villages = [];
+        if (this.province) {
+            this.cities = await this.fetchOptions('cities', this.province);
+        }
+    },
+
+    async loadDistricts() {
+        this.district = this.village = '';
+        this.loadShipping();
+        this.districts = this.villages = [];
+        if (this.city) {
+            this.districts = await this.fetchOptions('districts', this.city);
+        }
+    },
+
+    async loadVillages() {
+        this.village = '';
+        this.loadShipping();
+        this.villages = [];
+        if (this.district) {
+            this.villages = await this.fetchOptions('villages', this.district);
+        }
+    },
+});
+
 Alpine.start();

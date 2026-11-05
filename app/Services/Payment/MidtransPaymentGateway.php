@@ -26,7 +26,12 @@ class MidtransPaymentGateway implements PaymentGateway
                 'name' => Str::limit($item->product_name, 50, ''),
                 'price' => $item->price,
                 'quantity' => $item->quantity,
-            ])->all(),
+            ])->when($order->shipping_cost > 0, fn ($items) => $items->push([
+                'id' => 'shipping',
+                'name' => Str::limit('Ongkir '.$order->shipping_courier.' '.$order->shipping_service, 50, ''),
+                'price' => $order->shipping_cost,
+                'quantity' => 1,
+            ]))->all(),
             'customer_details' => [
                 'first_name' => $order->name,
                 'email' => $order->email,

@@ -20,6 +20,12 @@
                     </li>
                 @endforeach
             </ul>
+            @if ($order->shipping_cost > 0)
+                <dl class="mt-4 flex items-center justify-between border-t border-gray-100 pt-4 text-sm">
+                    <dt class="text-gray-500">Ongkir ({{ $order->shipping_courier }} {{ $order->shipping_service }})</dt>
+                    <dd class="font-semibold text-gray-900">Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}</dd>
+                </dl>
+            @endif
             <dl class="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
                 <dt class="text-sm text-gray-500">Total</dt>
                 <dd class="text-lg font-extrabold text-gray-900">Rp{{ number_format($order->total, 0, ',', '.') }}</dd>
@@ -32,7 +38,7 @@
                 <div><dt class="inline font-semibold">Nama:</dt> <dd class="inline">{{ $order->name }}</dd></div>
                 <div><dt class="inline font-semibold">Nomor HP:</dt> <dd class="inline">{{ $order->phone }}</dd></div>
                 <div><dt class="inline font-semibold">Email:</dt> <dd class="inline">{{ $order->email }}</dd></div>
-                <div><dt class="inline font-semibold">Alamat:</dt> <dd class="inline">{{ $order->address }}</dd></div>
+                <div><dt class="inline font-semibold">Alamat:</dt> <dd class="inline">{{ $order->full_address }}</dd></div>
             </dl>
         </section>
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Public\CheckoutController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\OrderController;
 use App\Http\Controllers\Public\ProductController;
+use App\Http\Controllers\Public\RegionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/ongkir', [CheckoutController::class, 'shippingCost'])->middleware('throttle:30,1')->name('checkout.shipping-cost');
+    Route::get('/wilayah/provinsi/{province}/kabupaten', [RegionController::class, 'cities'])->name('regions.cities');
+    Route::get('/wilayah/kabupaten/{city}/kecamatan', [RegionController::class, 'districts'])->name('regions.districts');
+    Route::get('/wilayah/kecamatan/{district}/desa', [RegionController::class, 'villages'])->name('regions.villages');
     Route::get('/pesanan/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/pesanan/{order}/bayar', [OrderController::class, 'pay'])->name('orders.pay');
 

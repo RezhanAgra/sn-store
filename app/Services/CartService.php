@@ -39,6 +39,16 @@ class CartService
     }
 
     /**
+     * Berat total keranjang dalam gram (produk belum punya data berat, dipakai berat default per unit).
+     *
+     * @param  Collection<int, CartItem>  $items
+     */
+    public function weight(Collection $items): int
+    {
+        return $items->sum('quantity') * (int) config('services.rajaongkir.item_weight');
+    }
+
+    /**
      * Tambahkan produk ke keranjang. Qty digabung jika produk sudah ada.
      */
     public function add(User $user, Product $product, int $quantity): CartItem

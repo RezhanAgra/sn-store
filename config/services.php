@@ -42,4 +42,12 @@ return [
         'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
     ],
 
+    'rajaongkir' => [
+        'key' => env('RAJAONGKIR_API_KEY'),
+        'base_url' => env('RAJAONGKIR_BASE_URL', 'https://rajaongkir.komerce.id/api/v1'),
+        'origin_id' => (int) env('RAJAONGKIR_ORIGIN_ID', 79234),
+        'couriers' => ['jne', 'sicepat', 'jnt'],
+        'item_weight' => (int) env('RAJAONGKIR_ITEM_WEIGHT', 1000),
+    ],
+
 ];
