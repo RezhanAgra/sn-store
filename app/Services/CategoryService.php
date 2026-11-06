@@ -19,6 +19,14 @@ class CategoryService
     }
 
     /**
+     * Cari kategori berdasarkan slug, gagal (404) jika tidak ditemukan.
+     */
+    public function findBySlug(string $slug): Category
+    {
+        return Category::where('slug', $slug)->firstOrFail();
+    }
+
+    /**
      * Buat kategori baru dengan slug otomatis dari nama.
      *
      * @param  array{name: string, description?: string|null}  $data

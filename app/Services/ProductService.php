@@ -54,6 +54,14 @@ class ProductService
     }
 
     /**
+     * Cari produk beserta kategorinya, gagal (404) jika tidak ditemukan.
+     */
+    public function find(int $id): Product
+    {
+        return Product::with('category')->findOrFail($id);
+    }
+
+    /**
      * @param  array{name: string, category_id: int, price: int, stock: int, description?: string|null, image?: UploadedFile|null}  $data
      */
     public function create(array $data): Product

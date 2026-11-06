@@ -15,7 +15,6 @@ use Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\DateFormat;
-use Illuminate\Database\Eloquent\Attributes\Initialize;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
@@ -1250,9 +1249,9 @@ trait HasAttributes
 
         $this->mergeAttributeFromCachedCasts($key);
 
-        $value = $this->asJson($this->getArrayAttributeWithValue(
+        $value = $this->castAttributeAsJson($key, $this->getArrayAttributeWithValue(
             $path, $key, $value
-        ), $this->getJsonCastFlags($key));
+        ));
 
         $this->attributes[$key] = match (true) {
             $this->isEncryptedCastable($key) => $this->castAttributeAsEncryptedString($key, $value),
